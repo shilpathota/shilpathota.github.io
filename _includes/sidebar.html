@@ -4,8 +4,10 @@
     {% if page.path contains 'docs/' and page.path != 'docs/index.md' %}
       {% assign path_parts = page.path | split: '/' %}
       {% assign depth = path_parts | size %}
-      <li style="margin-left: {{ depth | minus: 2 | times: 20 }}px;">
-        <a href="{{ page.url }}">{{ page.title | default: page.path }}</a>
+      <li style="margin-left: {{ depth | minus: 2 | times: 15 }}px;">
+        <a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">
+          {{ page.title | default: path_parts | last | replace: '.md', '' | replace: '.html', '' }}
+        </a>
       </li>
     {% endif %}
   {% endfor %}
