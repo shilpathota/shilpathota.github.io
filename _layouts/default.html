@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>{{ page.title }}</title>
-  <link rel="stylesheet" href="/assets/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
   <nav class="sidebar-nav">
     <div class="sidebar-title">📚 Knowledge Repository</div>
     {% include sidebar.html %}
   </nav>
+
   <div class="content">
     {{ content }}
   </div>
 </body>
-
 </html>

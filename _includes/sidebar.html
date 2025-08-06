@@ -5,15 +5,13 @@
   {% for section in grouped %}
     {% assign section_name = section.name | capitalize %}
     <details class="sidebar-section" {% if page.path contains section.name %} open {% endif %}>
-      <summary class="sidebar-section-title">{{ section_name }}</summary>
+      <summary>{{ section_name }}</summary>
       <ul class="sidebar-links">
         {% for subpage in section.items %}
           {% assign display_title = subpage.title | default: subpage.path | split: '/' | last | replace: ".md", "" | replace: ".html", "" %}
-          
           {% if display_title == "index" or display_title == "Index" %}
             {% assign display_title = section_name %}
           {% endif %}
-          
           <li>
             <a href="{{ subpage.url }}" class="{% if page.url == subpage.url %}active{% endif %}">
               {{ display_title }}
