@@ -1,14 +1,21 @@
-<ul>
-  {% assign sorted_pages = site.pages | sort: "path" %}
-  {% for page in sorted_pages %}
-    {% if page.path contains 'docs/' and page.path != 'docs/index.md' %}
-      {% assign path_parts = page.path | split: '/' %}
-      {% assign depth = path_parts | size %}
-      <li style="margin-left: {{ depth | minus: 2 | times: 15 }}px;">
-        <a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">
-          {{ page.title | default: path_parts | last | replace: '.md', '' | replace: '.html', '' }}
-        </a>
-      </li>
-    {% endif %}
+<nav class="sidebar-nav">
+  {% assign pages_by_folder = site.pages | where_exp: "item", "item.path contains 'docs/'" %}
+  {% assign grouped = pages_by_folder | group_by_exp: "item", "item.path | split: '/' | slice: 1, 1 | first" %}
+
+  {% for section in grouped %}
+    {% assign section_name = section.name | capitalize %}
+    <details class="sidebar-section" {% if page.path contains section.name %} open {% endif %}>
+      <summary class="sidebar-section-title">{{ section_name }}</summary>
+      <ul class="sidebar-links">
+        {% for subpage in section.items %}
+          {% assign display_title = subpage.title | default: subpage.path | split: '/' | last | replace: ".md", "" | replace: ".html", "" %}
+          <li>
+            <a href="{{ subpage.url }}" class="{% if page.url == subpage.url %}active{% endif %}">
+              {{ display_title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </details>
   {% endfor %}
-</ul>
+</nav>
