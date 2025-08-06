@@ -9,6 +9,11 @@
       <ul class="sidebar-links">
         {% for subpage in section.items %}
           {% assign display_title = subpage.title | default: subpage.path | split: '/' | last | replace: ".md", "" | replace: ".html", "" %}
+          
+          {% if display_title == "index" or display_title == "Index" %}
+            {% assign display_title = section_name %}
+          {% endif %}
+          
           <li>
             <a href="{{ subpage.url }}" class="{% if page.url == subpage.url %}active{% endif %}">
               {{ display_title }}
