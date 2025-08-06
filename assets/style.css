@@ -4,64 +4,56 @@ body {
   display: flex;
   background-color: #f9fafb;
   color: #212529;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
+/* Sidebar */
 .sidebar-nav {
   width: 280px;
-  min-width: 280px;
   background-color: #fff;
   border-right: 1px solid #e0e0e0;
   height: 100vh;
   padding: 24px 20px;
-  overflow-y: auto;
   position: fixed;
   top: 0;
   left: 0;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
-.sidebar-section {
-  margin-bottom: 30px;
-  border-radius: 6px;
-  border: 1px solid transparent;
+.sidebar-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0b72e8;
+  margin-bottom: 20px;
+  display: block;
 }
 
-.sidebar-section[open] {
-  border-color: #cce0ff;
-  background-color: #f8fbff;
+/* Section Collapsibles */
+.sidebar-section {
+  margin-bottom: 20px;
 }
 
 .sidebar-section summary {
   font-size: 12px;
   color: #6c757d;
   text-transform: uppercase;
-  margin-bottom: 8px;
   font-weight: 600;
   cursor: pointer;
   padding: 8px 12px;
   list-style: none;
   border-radius: 6px;
-  outline: none;
-  user-select: none;
   transition: background-color 0.2s ease;
-  position: relative;
 }
 
-/* Hide default marker */
-.sidebar-section summary::-webkit-details-marker {
-  display: none;
-}
-
-/* Custom arrow */
 .sidebar-section summary::before {
   content: '▶';
   font-size: 10px;
   display: inline-block;
   transform: rotate(0deg);
-  transition: transform 0.2s ease;
   margin-right: 8px;
+  transition: transform 0.2s ease;
   color: #6c757d;
 }
 
@@ -70,24 +62,15 @@ body {
   color: #007bff;
 }
 
-.sidebar-section summary:hover {
-  background-color: #e6f0ff;
-  color: #0056b3;
-}
-
 .sidebar-links {
   list-style: none;
-  padding-left: 16px;
+  padding-left: 20px;
   margin: 0;
-}
-
-.sidebar-links li {
-  margin: 4px 0;
 }
 
 .sidebar-links a {
   display: block;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 6px;
   text-decoration: none;
   color: #212529;
@@ -106,30 +89,10 @@ body {
   font-weight: 600;
 }
 
+/* Content Area */
 .content {
-  margin-left: 280px;
+  margin-left: 280px; /* Matches sidebar width */
   padding: 40px;
   flex: 1;
-  overflow-y: auto;
-  height: 100vh;
   box-sizing: border-box;
-}
-
-.sidebar h2,
-.sidebar a,
-.content,
-h1, h2, h3, p, li {
-  font-family: 'Poppins', sans-serif;
-}
-h1, h2 {
-  font-weight: 600;
-}
-p, li, a {
-  font-weight: 300;
-}
-
-/* Headings */
-h1, h2, h3 {
-  color: #212529;
-  margin-top: 0;
 }
