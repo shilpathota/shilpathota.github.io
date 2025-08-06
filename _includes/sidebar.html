@@ -1,0 +1,12 @@
+<ul>
+  {% assign sorted_pages = site.pages | sort: "path" %}
+  {% for page in sorted_pages %}
+    {% if page.path contains 'docs/' and page.path != 'docs/index.md' %}
+      {% assign path_parts = page.path | split: '/' %}
+      {% assign depth = path_parts | size %}
+      <li style="margin-left: {{ depth | minus: 2 | times: 20 }}px;">
+        <a href="{{ page.url }}">{{ page.title | default: page.path }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

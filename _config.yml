@@ -1,1 +1,14 @@
-theme: jekyll-theme-architect
+title: Deep Dive Machine Learning
+description: Learning with simple language and deep dive of each concept to understand better
+theme: minima
+markdown: kramdown
+collections:
+  docs:
+    output: true
+    permalink: /:path/
+defaults:
+  - scope:
+      path: ""
+      type: docs
+    values:
+      layout: default
