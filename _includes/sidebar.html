@@ -4,66 +4,44 @@
   {% assign pages = site.pages | where_exp: "p", "p.path contains 'docs/'" %}
   {% assign sorted_pages = pages | sort: "path" %}
 
-  {% assign current_level1 = nil %}
-  {% assign current_level2 = nil %}
+  {% assign previous_indent = 0 %}
+  {% assign open_tags = "" %}
 
   {% for page in sorted_pages %}
-    {% assign segments = page.path | split: '/' %}
-    {% assign level1 = segments[1] | replace: '%20', ' ' %}
-    {% assign level2 = segments[2] %}
+    {% assign segments = page.path | remove: 'docs/' | split: '/' %}
+    {% assign indent = segments.size %}
     {% assign filename = segments | last %}
-    {% assign display_title = page.title | default: filename | replace: '.md', '' | replace: '.html', '' | replace: '%20', ' ' | capitalize %}
+    {% assign is_file = filename contains '.md' or filename contains '.html' %}
+    {% assign display_title = page.title | default: filename | replace: '.md', '' | replace: '.html', '' | capitalize %}
 
-    {%- comment -%} Start new top-level section {%- endcomment -%}
-    {% if level1 != current_level1 %}
-      {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
-      {% if current_level1 %}</ul></details>{% endif %}
-      
-      <details class="sidebar-section" {% if current_url contains level1 %}open{% endif %}>
-        <summary>{{ level1 | upcase }}</summary>
-        <ul class="sidebar-links">
-
-        {%- comment -%} Insert link to index.md if available {%- endcomment -%}
-        {% assign index_path = 'docs/' | append: level1 | append: '/index.md' %}
-        {% assign index_page = site.pages | where: "path", index_path | first %}
-        {% if index_page %}
-          <li>
-            <a href="{{ index_page.url }}" class="{% if current_url == index_page.url %}active{% endif %}">Overview</a>
-          </li>
-        {% endif %}
-        
-      {% assign current_level1 = level1 %}
+    {%- comment -%}
+    Adjust open/close tags based on depth difference
+    {%- endcomment -%}
+    {% assign diff = previous_indent | minus: indent %}
+    {% if diff > 0 %}
+      {% for i in (1..diff) %}
+        </ul></details>
+      {% endfor %}
     {% endif %}
 
-    {% assign is_subfolder = level2 and level2 != filename %}
-    {% assign is_file_under_level1 = level2 == nil %}
+    {% assign previous_indent = indent %}
 
-    {%- comment -%} Start new subfolder section {%- endcomment -%}
-    {% if is_subfolder %}
-      {% assign subfolder = level2 | replace: '%20', ' ' %}
-      {% if subfolder != current_level2 %}
-        {% if current_level2 %}</ul></details>{% endif %}
-        <details class="sidebar-subsection" {% if current_url contains subfolder %}open{% endif %}>
-          <summary>{{ subfolder | capitalize }}</summary>
-          <ul class="sidebar-links">
-        {% assign current_level2 = subfolder %}
-      {% endif %}
-    {% endif %}
-
-    {%- comment -%} Close previous subsection if now in root-level file {%- endcomment -%}
-    {% if is_file_under_level1 and current_level2 %}
-      </ul></details>
-      {% assign current_level2 = nil %}
-    {% endif %}
-
-    {%- comment -%} Render actual file links {%- endcomment -%}
-    {% if filename != level1 and filename != level2 %}
+    {%- comment -%}
+    Render folders as <details>, files as <li>
+    {%- endcomment -%}
+    {% if is_file %}
       <li>
         <a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ display_title }}</a>
       </li>
+    {% else %}
+      <details class="sidebar-section" {% if current_url contains filename %}open{% endif %}>
+        <summary>{{ filename | capitalize }}</summary>
+        <ul class="sidebar-links">
     {% endif %}
   {% endfor %}
 
-  {% if current_level2 %}</ul></details>{% endif %}
-  {% if current_level1 %}</ul></details>{% endif %}
+  {%- comment -%} Close remaining open tags {%- endcomment -%}
+  {% for i in (1..previous_indent) %}
+    </ul></details>
+  {% endfor %}
 </nav>
