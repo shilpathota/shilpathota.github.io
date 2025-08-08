@@ -79,6 +79,11 @@ body {
   color: #9ca3af;
 }
 
+.sidebar-section details[open] summary::before {
+  transform: rotate(90deg);
+    transition: transform 0.2s ease, color 0.2s ease;
+    color: #007bff;
+}
 /* LINKS */
 .sidebar-links {
   list-style: none;
