@@ -31,7 +31,6 @@
       {% assign subfolder = parts[1] %}
       {% assign folder_key = folder | append: '-' | append: subfolder %}
 
-      {# Close previous subfolder if changed #}
       {% if current_subfolder != folder_key %}
         {% if current_subfolder %}</ul></details>{% endif %}
         {% if current_folder != folder %}
