@@ -13,119 +13,6 @@ body {
   min-height: 100vh;
 }
 
-/* SIDEBAR */
-.sidebar-nav {
-  width: 280px;
-  background-color: #ffffff;
-  border-right: 1px solid #e5e7eb;
-  padding: 24px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  overflow-y: auto;
-}
-
-.sidebar-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #0b72e8;
-  margin-bottom: 24px;
-}
-
-/* COLLAPSIBLE SECTIONS */
-.sidebar-section {
-  margin-bottom: 20px;
-  border-radius: 6px;
-}
-
-.sidebar-section summary {
-  font-size: 11px;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  list-style: none;
-  user-select: none;
-  border-radius: 4px;
-  transition: background 0.2s ease;
-}
-.sidebar-section summary a {
-  text-decoration: none;
-  color: inherit;
-}
-.sidebar-section summary a:hover {
-  color: #1d4ed8;
-}
-.sidebar-section summary:hover {
-  background-color: #f1f5f9;
-}
-
-.sidebar-section[open] summary::before {
-  transform: rotate(90deg);
-  transition: transform 0.2s ease, color 0.2s ease;
-    color: #007bff;
-
-}
-
-.sidebar-section summary::before {
-  content: '▶';
-  display: inline-block;
-  margin-right: 8px;
-  transition: transform 0.2s ease;
-  font-size: 10px;
-  color: #9ca3af;
-}
-
-.sidebar-section details[open] summary::before {
-  transform: rotate(90deg);
-    transition: transform 0.2s ease, color 0.2s ease;
-    color: #007bff;
-}
-/* LINKS */
-.sidebar-links {
-  list-style: none;
-  padding-left: 12px;
-  margin-top: 6px;
-}
-
-.sidebar-links li {
-  margin: 4px 0;
-}
-
-.sidebar-links a {
-  display: block;
-  padding: 6px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  color: #374151;
-  transition: background-color 0.2s ease;
-}
-
-.sidebar-links a:hover {
-  background-color: #e0f0ff;
-  color: #1d4ed8;
-}
-
-.sidebar-links a.active {
-  background-color: #0b72e8;
-  color: #ffffff;
-  font-weight: 500;
-}
-.sidebar-links li {
-  padding-left: 0;
-}
-.sidebar-links li a {
-  padding-left: 12px;
-}
-.sidebar-links li a.active {
-  font-weight: bold;
-  background-color: #0b72e8;
-  color: white;
-  border-radius: 6px;
-}
 /* MAIN CONTENT */
 .content {
   margin-left: 280px;
@@ -149,12 +36,6 @@ p {
 }
 
 @media (max-width: 768px) {
-  .sidebar-nav {
-    position: relative;
-    width: 100%;
-    border-right: none;
-    padding: 12px;
-  }
 
   .content {
     margin-left: 0;

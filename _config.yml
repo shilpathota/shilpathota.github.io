@@ -1,10 +1,15 @@
-
 title: Deep Dive Machine Learning
-description: Learning with simple language and deep dive of each concept to understand better
+description: Learning with simple language and deep dive of each concept
 markdown: kramdown
+
+# GitHub Pages-compatible
 plugins:
   - jekyll-remote-theme
 remote_theme: zendesk/jekyll-theme-zendesk-garden@main
+
+# For user/organization site repos (like shilpathota.github.io)
+baseurl: ""  # important for links
+
 sidebar:
   - label: Machine Learning
     children:
