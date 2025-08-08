@@ -8,24 +8,23 @@
     {% include search_input.html %}
   {% endif %}
    <style>
-    /* Custom header styling */
+ /* Custom header styling */
     .custom-header {
       background-color: #001861; /* Navy blue background */
-      text-align: center;     /* Center contents horizontally */
-      padding: 1rem 0;        /* Top and bottom padding */
+      display: flex;             /* Use flexbox */
+      justify-content: center;   /* Center horizontally */
+      align-items: center;       /* Center vertically */
+      padding: 1rem 0;           /* Top and bottom padding */
     }
 
     .header-title-link {
-      text-decoration: none;  /* Remove underline */
+      text-decoration: none;     /* Remove underline */
     }
 
     .header-title-text {
-      color: white;           /* White text */
-      font-size: 2rem;         /* Adjust font size */
+      color: white;              /* White text */
+      font-size: 2rem;            /* Adjust font size */
       font-weight: bold;
-    }
-    .custom-title a{
-        text-align: center;
     }
   </style>
 </header>
