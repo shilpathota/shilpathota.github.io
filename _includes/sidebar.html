@@ -35,13 +35,21 @@
     {% endif %}
 
     {%- comment -%} Start new subfolder section {%- endcomment -%}
-    {% if level2 and level2 != filename and level2 != current_level2 %}
-      {% if current_level2 %}</ul></details>{% endif %}
-      <details class="sidebar-subsection" {% if current_url contains level2 %}open{% endif %}>
-        <summary>{{ level2 | capitalize }}</summary>
-        <ul class="sidebar-links">
-      {% assign current_level2 = level2 %}
-    {% endif %}
+{% if level2 and level2 != filename %}
+  {% if level2 != current_level2 %}
+    {% if current_level2 %}</ul></details>{% endif %}
+    <details class="sidebar-subsection" {% if current_url contains level2 %}open{% endif %}>
+      <summary>{{ level2 | capitalize }}</summary>
+      <ul class="sidebar-links">
+    {% assign current_level2 = level2 %}
+  {% endif %}
+{% else %}
+  {% if current_level2 %}
+    </ul></details>
+    {% assign current_level2 = nil %}
+  {% endif %}
+{% endif %}
+
 
     {%- comment -%} Only list leaf file links (not folders) {%- endcomment -%}
     {% if level2 == nil or (level2 and level2 == filename) %}
