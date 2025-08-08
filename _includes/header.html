@@ -1,0 +1,28 @@
+<header class="chrome:header custom-header">
+  <div class="chrome:header_title">
+    <a href="{{ "/" | relative_url }}" class="header-title-link">
+      <span class="header-title-text">{{ site.title }}</span>
+    </a>
+  </div>
+  {% if site.search_enabled %}
+    {% include search_input.html %}
+  {% endif %}
+   <style>
+    /* Custom header styling */
+    .custom-header {
+      background-color: navy; /* Navy blue background */
+      text-align: center;     /* Center contents horizontally */
+      padding: 1rem 0;        /* Top and bottom padding */
+    }
+
+    .header-title-link {
+      text-decoration: none;  /* Remove underline */
+    }
+
+    .header-title-text {
+      color: white;           /* White text */
+      font-size: 2rem;         /* Adjust font size */
+      font-weight: bold;
+    }
+  </style>
+</header>
