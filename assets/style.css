@@ -52,16 +52,23 @@ body {
   border-radius: 4px;
   transition: background 0.2s ease;
 }
-
+.sidebar-section summary a {
+  text-decoration: none;
+  color: inherit;
+}
+.sidebar-section summary a:hover {
+  color: #1d4ed8;
+}
 .sidebar-section summary:hover {
   background-color: #f1f5f9;
 }
 
 .sidebar-section[open] summary::before {
   transform: rotate(90deg);
-  color: #007bff;
-}
+  transition: transform 0.2s ease, color 0.2s ease;
+    color: #007bff;
 
+}
 .sidebar-section summary::before {
   content: '▶';
   display: inline-block;
@@ -134,10 +141,7 @@ p {
   line-height: 1.6;
   color: #374151;
 }
-.sidebar-section[open] summary::before {
-  transform: rotate(90deg);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
+
 @media (max-width: 768px) {
   .sidebar-nav {
     position: relative;

@@ -26,8 +26,11 @@
       {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
       {% if current_level1 %}</ul></details>{% endif %}
       <details class="sidebar-section" {% if current_url contains level1 %}open{% endif %}>
-        <summary>{{ level1 | upcase }}</summary>
-        <ul class="sidebar-links">
+<summary>
+  <a href="/docs/{{ level1 | uri_escape }}/" class="{% if current_url contains level1 and current_url == '/docs/' | append: level1 | append: '/' %}active{% endif %}">
+    {{ level1 | upcase }}
+  </a>
+</summary>        <ul class="sidebar-links">
       {% assign current_level1 = level1 %}
     {% endif %}
 
@@ -41,11 +44,11 @@
     {% endif %}
 
     {%- comment -%} Only list leaf file links (not folders) {%- endcomment -%}
-    {% unless filename == level1 or filename == level2 %}
+    {% if level2 == nil or (level2 and level2 == filename) %}
       <li>
         <a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ display_title }}</a>
       </li>
-    {% endunless %}
+    {% endif %}
   {% endfor %}
 
   {% if current_level2 %}</ul></details>{% endif %}
