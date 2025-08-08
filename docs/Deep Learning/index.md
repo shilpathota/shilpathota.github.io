@@ -1,6 +1,7 @@
 ---
 title: Deep Learning
 layout: default
+id: intro-deep
 ---
 
 # Overview of Deep Learning
