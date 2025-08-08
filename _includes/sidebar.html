@@ -1,47 +1,53 @@
 <nav class="sidebar-nav">
   <div class="sidebar-title">📚 Knowledge Repository</div>
-  {% assign current_url = page.url %}
+
   {% assign pages = site.pages | where_exp: "p", "p.path contains 'docs/'" %}
   {% assign sorted_pages = pages | sort: "path" %}
 
-  {% assign previous_indent = 0 %}
-  {% assign open_tags = "" %}
+  {% assign tree = {} %}
+  {% assign current_url = page.url %}
 
   {% for page in sorted_pages %}
-    {% assign segments = page.path | remove: 'docs/' | split: '/' %}
-    {% assign indent = segments.size %}
-    {% assign filename = segments | last %}
-    {% assign is_file = filename contains '.md' or filename contains '.html' %}
-    {% assign display_title = page.title | default: filename | replace: '.md', '' | replace: '.html', '' | capitalize %}
+    {% assign parts = page.path | remove: 'docs/' | split: '/' %}
+    {% assign depth = parts.size %}
+    {% assign filename = parts | last %}
 
-    {%- comment -%}
-    Adjust open/close tags based on depth difference
-    {%- endcomment -%}
-    {% assign diff = previous_indent | minus: indent %}
-    {% if diff > 0 %}
-      {% for i in (1..diff) %}
-        </ul></details>
-      {% endfor %}
-    {% endif %}
-
-    {% assign previous_indent = indent %}
-
-    {%- comment -%}
-    Render folders as <details>, files as <li>
-    {%- endcomment -%}
-    {% if is_file %}
-      <li>
-        <a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ display_title }}</a>
-      </li>
-    {% else %}
-      <details class="sidebar-section" {% if current_url contains filename %}open{% endif %}>
-        <summary>{{ filename | capitalize }}</summary>
-        <ul class="sidebar-links">
+    {% if filename contains '.md' or filename contains '.html' %}
+      {% assign file_display = page.title | default: filename | replace: '.md', '' | replace: '.html', '' | replace: '%20', ' ' %}
+      
+      {% if depth == 1 %}
+        <details class="sidebar-section" {% if current_url contains parts[0] %}open{% endif %}>
+          <summary>{{ parts[0] | capitalize }}</summary>
+          <ul class="sidebar-links">
+            <li><a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ file_display }}</a></li>
+          </ul>
+        </details>
+      {% elsif depth == 2 %}
+        {% assign folder = parts[0] %}
+        {% if folder != previous_folder %}
+          {% if previous_folder %}</ul></details>{% endif %}
+          <details class="sidebar-section" {% if current_url contains folder %}open{% endif %}>
+            <summary>{{ folder | capitalize }}</summary>
+            <ul class="sidebar-links">
+          {% assign previous_folder = folder %}
+        {% endif %}
+        <li><a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ file_display }}</a></li>
+      {% elsif depth == 3 %}
+        {% assign folder = parts[0] %}
+        {% assign subfolder = parts[1] %}
+        {% assign folder_key = folder | append: '-' | append: subfolder %}
+        {% if folder_key != previous_subfolder %}
+          {% if previous_subfolder %}</ul></details>{% endif %}
+          <details class="sidebar-subsection" {% if current_url contains subfolder %}open{% endif %}>
+            <summary>{{ subfolder | capitalize }}</summary>
+            <ul class="sidebar-links">
+          {% assign previous_subfolder = folder_key %}
+        {% endif %}
+        <li><a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ file_display }}</a></li>
+      {% endif %}
     {% endif %}
   {% endfor %}
 
-  {%- comment -%} Close remaining open tags {%- endcomment -%}
-  {% for i in (1..previous_indent) %}
-    </ul></details>
-  {% endfor %}
+  {% if previous_subfolder %}</ul></details>{% endif %}
+  {% if previous_folder %}</ul></details>{% endif %}
 </nav>
