@@ -14,7 +14,7 @@
     {% assign filename = segments | last %}
     {% assign display_title = page.title | default: filename | replace: '.md', '' | replace: '.html', '' | replace: '%20', ' ' | capitalize %}
 
-    {%- comment -%} Start new top-level folder section {%- endcomment -%}
+    {%- comment -%} Top-level section {%- endcomment -%}
     {% if level1 != current_level1 %}
       {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
       {% if current_level1 %}</ul></details>{% endif %}
@@ -28,8 +28,10 @@
       {% assign current_level1 = level1 %}
     {% endif %}
 
-    {%- comment -%} Handle nested level2 folders (e.g., Algorithms) {%- endcomment -%}
     {% assign is_subfolder = level2 and level2 != filename %}
+    {% assign is_file_under_level1 = level2 == nil %}
+
+    {%- comment -%} Subfolder section like Algorithms {%- endcomment -%}
     {% if is_subfolder %}
       {% assign subfolder = level2 | replace: '%20', ' ' %}
       {% if subfolder != current_level2 %}
@@ -41,11 +43,13 @@
       {% endif %}
     {% endif %}
 
-    {%- comment -%} Leaf file rendering {%- endcomment -%}
-    {% unless is_subfolder %}
-      {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
-    {% endunless %}
+    {%- comment -%} If a new non-subfolder file starts, close subsection {%- endcomment -%}
+    {% if is_file_under_level1 and current_level2 %}
+      </ul></details>
+      {% assign current_level2 = nil %}
+    {% endif %}
 
+    {%- comment -%} Only render actual files (not folders) {%- endcomment -%}
     {% if filename != level1 and filename != level2 %}
       <li>
         <a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ display_title }}</a>
