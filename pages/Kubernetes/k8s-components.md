@@ -4,6 +4,6 @@ layout: default
 id: k8s-components
 ---
 
-# Linear Regression
+# Kubernetes Components
 
 Welcome to Machine Learning

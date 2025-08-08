@@ -24,5 +24,5 @@ sidebar:
       - deep-learning
   - label: Kubernetes
     children:
-      - kube-intro
+      - intro-kube
       - k8s-components
