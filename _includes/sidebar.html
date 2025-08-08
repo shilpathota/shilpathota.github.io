@@ -1,6 +1,7 @@
 <!-- _includes/sidebar.html -->
 <nav class="sidebar-nav">
   <div class="sidebar-title">📚 Knowledge Repository</div>
+  {% assign current_url = page.url | relative_url %}
   {% assign pages = site.pages | where_exp: "page", "page.path contains 'docs/'" %}
   {% assign sorted_pages = pages | sort: "path" %}
 
@@ -14,10 +15,17 @@
     {% assign filename = segments | last | replace: ".md", "" | replace: ".html", "" | replace: '%20', ' ' %}
     {% assign display_title = page.title | default: filename | capitalize %}
 
+    {% assign is_folder = false %}
+    {% for other in sorted_pages %}
+      {% if other.path != page.path and other.path contains page.path %}
+        {% assign is_folder = true %}
+      {% endif %}
+    {% endfor %}
+
     {% if level1 != current_level1 %}
       {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
       {% if current_level1 %}</ul></details>{% endif %}
-      <details class="sidebar-section" {% if page.path contains level1 %}open{% endif %}>
+      <details class="sidebar-section" {% if current_url contains level1 %}open{% endif %}>
         <summary>{{ level1 | upcase }}</summary>
         <ul class="sidebar-links">
       {% assign current_level1 = level1 %}
@@ -25,15 +33,17 @@
 
     {% if level2 and level2 != filename and level2 != current_level2 %}
       {% if current_level2 %}</ul></details>{% endif %}
-      <details class="sidebar-subsection" {% if page.path contains level2 %}open{% endif %}>
+      <details class="sidebar-subsection" {% if current_url contains level2 %}open{% endif %}>
         <summary>{{ level2 | capitalize }}</summary>
         <ul class="sidebar-links">
       {% assign current_level2 = level2 %}
     {% endif %}
 
-    {% unless filename == level1 or filename == level2 %}
+    {% unless filename == level1 or filename == level2 or is_folder %}
       <li style="padding-left: {% if current_level2 %}32px{% elsif current_level1 %}16px{% else %}0{% endif %};">
-        <a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">{{ display_title }}</a>
+        <a href="{{ page.url | relative_url }}" class="{% if page.url == current_url %}active{% endif %}">
+          {{ display_title }}
+        </a>      
       </li>
     {% endunless %}
   {% endfor %}
