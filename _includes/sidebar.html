@@ -14,24 +14,31 @@
     {% assign filename = segments | last %}
     {% assign display_title = page.title | default: filename | replace: '.md', '' | replace: '.html', '' | replace: '%20', ' ' | capitalize %}
 
-    {%- comment -%} Top-level section {%- endcomment -%}
+    {%- comment -%} Start new top-level section {%- endcomment -%}
     {% if level1 != current_level1 %}
       {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
       {% if current_level1 %}</ul></details>{% endif %}
+      
       <details class="sidebar-section" {% if current_url contains level1 %}open{% endif %}>
-        <summary>
-          <a href="/docs/{{ level1 | uri_escape }}/" class="{% if current_url == '/docs/' | append: level1 | append: '/' %}active{% endif %}">
-            {{ level1 | upcase }}
-          </a>
-        </summary>
+        <summary>{{ level1 | upcase }}</summary>
         <ul class="sidebar-links">
+
+        {%- comment -%} Insert link to index.md if available {%- endcomment -%}
+        {% assign index_path = 'docs/' | append: level1 | append: '/index.md' %}
+        {% assign index_page = site.pages | where: "path", index_path | first %}
+        {% if index_page %}
+          <li>
+            <a href="{{ index_page.url }}" class="{% if current_url == index_page.url %}active{% endif %}">Overview</a>
+          </li>
+        {% endif %}
+        
       {% assign current_level1 = level1 %}
     {% endif %}
 
     {% assign is_subfolder = level2 and level2 != filename %}
     {% assign is_file_under_level1 = level2 == nil %}
 
-    {%- comment -%} Subfolder section like Algorithms {%- endcomment -%}
+    {%- comment -%} Start new subfolder section {%- endcomment -%}
     {% if is_subfolder %}
       {% assign subfolder = level2 | replace: '%20', ' ' %}
       {% if subfolder != current_level2 %}
@@ -43,13 +50,13 @@
       {% endif %}
     {% endif %}
 
-    {%- comment -%} If a new non-subfolder file starts, close subsection {%- endcomment -%}
+    {%- comment -%} Close previous subsection if now in root-level file {%- endcomment -%}
     {% if is_file_under_level1 and current_level2 %}
       </ul></details>
       {% assign current_level2 = nil %}
     {% endif %}
 
-    {%- comment -%} Only render actual files (not folders) {%- endcomment -%}
+    {%- comment -%} Render actual file links {%- endcomment -%}
     {% if filename != level1 and filename != level2 %}
       <li>
         <a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ display_title }}</a>
