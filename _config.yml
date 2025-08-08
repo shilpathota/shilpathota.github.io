@@ -1,3 +1,9 @@
+
+title: Deep Dive Machine Learning
+description: Learning with simple language and deep dive of each concept to understand better
+markdown: kramdown
+plugins:
+  - jekyll-remote-theme
 remote_theme: zendesk/jekyll-theme-zendesk-garden@main
 sidebar:
   - label: Machine Learning

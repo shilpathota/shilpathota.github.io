@@ -2,6 +2,7 @@
 title: Deep Learning
 sidebar_label: Overview
 id: deep-learning
+layout: default
 ---
 
 # Overview of Deep Learning
