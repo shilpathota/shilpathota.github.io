@@ -1,6 +1,6 @@
 ---
 title: Deep Learning
-layout: default
+sidebar_label: Overview
 id: intro-deep
 ---
 
