@@ -4,37 +4,39 @@
   {% assign pages = site.pages | where_exp: "page", "page.path contains 'docs/'" %}
   {% assign sorted_pages = pages | sort: "path" %}
 
-  {% assign previous_level1 = "" %}
-  {% assign previous_level2 = "" %}
+  {% assign current_level1 = nil %}
+  {% assign current_level2 = nil %}
 
   {% for page in sorted_pages %}
     {% assign segments = page.path | split: '/' %}
     {% assign level1 = segments[1] | replace: '%20', ' ' %}
     {% assign level2 = segments[2] | replace: '%20', ' ' %}
-    {% assign level3 = segments[3] | replace: '%20', ' ' %}
-    {% assign display_title = page.title | default: segments | last | replace: '.md', '' | replace: '.html', '' | replace: '%20', ' ' %}
+    {% assign filename = segments | last | replace: ".md", "" | replace: ".html", "" | replace: '%20', ' ' %}
+    {% assign display_title = page.title | default: filename | capitalize %}
 
-    {% if level1 != previous_level1 %}
-      {% if previous_level1 != "" %}</ul></details>{% endif %}
+    {% if level1 != current_level1 %}
+      {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
+      {% if current_level1 %}</ul></details>{% endif %}
       <details class="sidebar-section" {% if page.path contains level1 %}open{% endif %}>
         <summary>{{ level1 | upcase }}</summary>
         <ul class="sidebar-links">
-      {% assign previous_level2 = "" %}
+      {% assign current_level1 = level1 %}
     {% endif %}
 
-    {% if level2 and level2 != display_title and level2 != previous_level2 %}
-      {% if previous_level2 != "" %}</ul></details>{% endif %}
+    {% if level2 and level2 != filename and level2 != current_level2 %}
+      {% if current_level2 %}</ul></details>{% endif %}
       <details class="sidebar-subsection" {% if page.path contains level2 %}open{% endif %}>
         <summary>{{ level2 | capitalize }}</summary>
         <ul class="sidebar-links">
-      {% assign previous_level2 = level2 %}
+      {% assign current_level2 = level2 %}
     {% endif %}
 
-    <li style="padding-left: {% if level3 %}32px{% elsif level2 %}16px{% else %}0{% endif %};">
-      <a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">{{ display_title }}</a>
-    </li>
-
-    {% assign previous_level1 = level1 %}
+    {% unless filename == level1 or filename == level2 %}
+      <li style="padding-left: {% if current_level2 %}32px{% elsif current_level1 %}16px{% else %}0{% endif %};">
+        <a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">{{ display_title }}</a>
+      </li>
+    {% endunless %}
   {% endfor %}
-  </ul></details></ul></details>
+  {% if current_level2 %}</ul></details>{% endif %}
+  {% if current_level1 %}</ul></details>{% endif %}
 </nav>
