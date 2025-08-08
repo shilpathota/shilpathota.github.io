@@ -80,8 +80,6 @@ body {
 
 .sidebar-links li {
   margin: 4px 0;
-  padding-left: 0;
-
 }
 
 .sidebar-links a {
@@ -102,18 +100,6 @@ body {
   background-color: #0b72e8;
   color: #ffffff;
   font-weight: 500;
-  
-}
-
-
-.sidebar-links li a {
-  padding-left: 12px;
-}
-
-.sidebar-links li a.active {
-  font-weight: bold;
-  background-color: #0b72e8;
-  color: white;
 }
 
 /* MAIN CONTENT */

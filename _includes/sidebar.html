@@ -1,51 +1,40 @@
-{% assign pages = site.pages | where_exp: "page", "page.path contains 'docs/'" %}
+<!-- _includes/sidebar.html -->
+<nav class="sidebar-nav">
+  <div class="sidebar-title">📚 Knowledge Repository</div>
+  {% assign pages = site.pages | where_exp: "page", "page.path contains 'docs/'" %}
+  {% assign sorted_pages = pages | sort: "path" %}
 
-{% assign tree = {} %}
-{% for page in pages %}
-  {% assign segments = page.path | split: '/' %}
-  {% assign last = segments | last %}
+  {% assign previous_level1 = "" %}
+  {% assign previous_level2 = "" %}
 
-  {% capture current_path %}{{ segments | join: '/' }}{% endcapture %}
-  {% assign parent = tree %}
-  {% for i in (1..segments.size-2) %}
-    {% capture folder %}{{ segments[i] }}{% endcapture %}
-    {% if parent[folder] == nil %}
-      {% assign parent = parent | merge: { folder: {} } %}
+  {% for page in sorted_pages %}
+    {% assign segments = page.path | split: '/' %}
+    {% assign level1 = segments[1] | replace: '%20', ' ' %}
+    {% assign level2 = segments[2] | replace: '%20', ' ' %}
+    {% assign level3 = segments[3] | replace: '%20', ' ' %}
+    {% assign display_title = page.title | default: segments | last | replace: '.md', '' | replace: '.html', '' | replace: '%20', ' ' %}
+
+    {% if level1 != previous_level1 %}
+      {% if previous_level1 != "" %}</ul></details>{% endif %}
+      <details class="sidebar-section" {% if page.path contains level1 %}open{% endif %}>
+        <summary>{{ level1 | upcase }}</summary>
+        <ul class="sidebar-links">
+      {% assign previous_level2 = "" %}
     {% endif %}
-    {% assign parent = parent[folder] %}
+
+    {% if level2 and level2 != display_title and level2 != previous_level2 %}
+      {% if previous_level2 != "" %}</ul></details>{% endif %}
+      <details class="sidebar-subsection" {% if page.path contains level2 %}open{% endif %}>
+        <summary>{{ level2 | capitalize }}</summary>
+        <ul class="sidebar-links">
+      {% assign previous_level2 = level2 %}
+    {% endif %}
+
+    <li style="padding-left: {% if level3 %}32px{% elsif level2 %}16px{% else %}0{% endif %};">
+      <a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">{{ display_title }}</a>
+    </li>
+
+    {% assign previous_level1 = level1 %}
   {% endfor %}
-{% endfor %}
-
-{% assign sorted_pages = pages | sort: "path" %}
-
-{% capture render_tree %}
-  <ul class="sidebar-root">
-    {% for page in sorted_pages %}
-      {% assign path_parts = page.path | split: '/' %}
-      {% assign section = path_parts[1] %}
-      {% assign subsection = path_parts[2] %}
-      {% assign display_name = page.title | default: path_parts | last | replace: '.md', '' | replace: '.html', '' %}
-      
-      {% if path_parts.size == 3 %}
-        <details class="sidebar-section" {% if page.url == page.url %}open{% endif %}>
-          <summary>{{ section | replace: "-", " " | capitalize }}</summary>
-          <ul class="sidebar-links">
-            <li><a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">{{ display_name }}</a></li>
-          </ul>
-        </details>
-      {% elsif path_parts.size == 4 %}
-        {% unless previous_section == section %}
-          {% if previous_section %}
-            </ul></details>
-          {% endif %}
-          <details class="sidebar-section" open>
-            <summary>{{ section | replace: "-", " " | capitalize }}</summary>
-            <ul class="sidebar-links">
-        {% endunless %}
-        <li style="padding-left: 16px;"><a href="{{ page.url }}" class="{% if page.url == page.url %}active{% endif %}">{{ display_name }}</a></li>
-        {% assign previous_section = section %}
-      {% endif %}
-    {% endfor %}
-  </ul>
-{% endcapture %}
-{{ render_tree }}
+  </ul></details></ul></details>
+</nav>
