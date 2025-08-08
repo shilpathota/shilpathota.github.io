@@ -2,14 +2,12 @@ remote_theme: zendesk/jekyll-theme-zendesk-garden@main
 sidebar:
   - label: Machine Learning
     children:
-      - intro-ml
+      - intro
+      - libraries
+      - tools
+      - label: Algorithms
+        children:
+          - linear-regression
   - label: Deep Learning
     children:
-      - intro-deep
-      - label: Optimization
-        children:
-          - AdaBoost
-      - Algorithms
-  - label: Kubernetes
-    children:
-      - Introduction
+      - deep-learning

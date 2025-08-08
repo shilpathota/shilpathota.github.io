@@ -1,7 +1,7 @@
 ---
 title: Introduction
 layout: default
-id: intro-ml
+id: intro
 ---
 
 # Intro

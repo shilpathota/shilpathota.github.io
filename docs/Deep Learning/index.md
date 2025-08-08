@@ -1,7 +1,7 @@
 ---
 title: Deep Learning
 sidebar_label: Overview
-id: intro-deep
+id: deep-learning
 ---
 
 # Overview of Deep Learning

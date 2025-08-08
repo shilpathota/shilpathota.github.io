@@ -1,7 +1,7 @@
 ---
 title: Linear Regression
 layout: default
-id: AdaBoost
+id: linear-regression
 ---
 
 # Linear Regression
