@@ -1,5 +1,5 @@
-title: Deep Dive Machine Learning
-description: Learning with simple language and deep dive of each concept
+title: Deep Dive With Shilpa
+description: Learning with simple language and deep dive of each concept is important to learn and digest
 markdown: kramdown
 
 # GitHub Pages-compatible
@@ -22,3 +22,7 @@ sidebar:
   - label: Deep Learning
     children:
       - deep-learning
+  - label: Kubernetes
+    children:
+      - kube-intro
+      - k8s-components
