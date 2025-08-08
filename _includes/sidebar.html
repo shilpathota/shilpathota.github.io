@@ -1,4 +1,3 @@
-<!-- _includes/sidebar.html -->
 <nav class="sidebar-nav">
   <div class="sidebar-title">📚 Knowledge Repository</div>
   {% assign current_url = page.url %}
@@ -11,48 +10,43 @@
   {% for page in sorted_pages %}
     {% assign segments = page.path | split: '/' %}
     {% assign level1 = segments[1] | replace: '%20', ' ' %}
-    {% assign level2 = segments[2] | replace: '%20', ' ' %}
+    {% assign level2 = segments[2] %}
     {% assign filename = segments | last %}
     {% assign display_title = page.title | default: filename | replace: '.md', '' | replace: '.html', '' | replace: '%20', ' ' | capitalize %}
-
-    {% assign next_index = forloop.index0 | plus: 1 %}
-    {% assign next_page = sorted_pages[next_index] %}
-    {% assign next_segments = next_page.path | split: '/' %}
-    {% assign next_level1 = next_segments[1] | replace: '%20', ' ' %}
-    {% assign next_level2 = next_segments[2] | replace: '%20', ' ' %}
 
     {%- comment -%} Start new top-level folder section {%- endcomment -%}
     {% if level1 != current_level1 %}
       {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
       {% if current_level1 %}</ul></details>{% endif %}
       <details class="sidebar-section" {% if current_url contains level1 %}open{% endif %}>
-<summary>
-  <a href="/docs/{{ level1 | uri_escape }}/" class="{% if current_url contains level1 and current_url == '/docs/' | append: level1 | append: '/' %}active{% endif %}">
-    {{ level1 | upcase }}
-  </a>
-</summary>        <ul class="sidebar-links">
+        <summary>
+          <a href="/docs/{{ level1 | uri_escape }}/" class="{% if current_url == '/docs/' | append: level1 | append: '/' %}active{% endif %}">
+            {{ level1 | upcase }}
+          </a>
+        </summary>
+        <ul class="sidebar-links">
       {% assign current_level1 = level1 %}
     {% endif %}
 
-    {%- comment -%} Start new subfolder section {%- endcomment -%}
-{% if level2 and level2 != filename %}
-  {% if level2 != current_level2 %}
-    {% if current_level2 %}</ul></details>{% endif %}
-    <details class="sidebar-subsection" {% if current_url contains level2 %}open{% endif %}>
-      <summary>{{ level2 | capitalize }}</summary>
-      <ul class="sidebar-links">
-    {% assign current_level2 = level2 %}
-  {% endif %}
-{% else %}
-  {% if current_level2 %}
-    </ul></details>
-    {% assign current_level2 = nil %}
-  {% endif %}
-{% endif %}
+    {%- comment -%} Handle nested level2 folders (e.g., Algorithms) {%- endcomment -%}
+    {% assign is_subfolder = level2 and level2 != filename %}
+    {% if is_subfolder %}
+      {% assign subfolder = level2 | replace: '%20', ' ' %}
+      {% if subfolder != current_level2 %}
+        {% if current_level2 %}</ul></details>{% endif %}
+        <details class="sidebar-subsection" {% if current_url contains subfolder %}open{% endif %}>
+          <summary>{{ subfolder | capitalize }}</summary>
+          <ul class="sidebar-links">
+        {% assign current_level2 = subfolder %}
+      {% endif %}
+    {% endif %}
 
+    {%- comment -%} Leaf file rendering {%- endcomment -%}
+    {% unless is_subfolder %}
+      {% if current_level2 %}</ul></details>{% assign current_level2 = nil %}{% endif %}
+    {% endunless %}
 
-    {%- comment -%} Only list leaf file links (not folders) {%- endcomment -%}
-    {% if level2 == nil or (level2 and level2 == filename) %}
+    {% if filename != level1 and filename != level2 %}
       <li>
         <a href="{{ page.url }}" class="{% if current_url == page.url %}active{% endif %}">{{ display_title }}</a>
       </li>
