@@ -86,3 +86,85 @@ If we would like to use integer positions instead of labels we can use `.iloc` i
 
 We can also filter by boolean indexing where we can put a condition in the indexing brackets to filter rows. `df[df['Sales'] > 160]` or `df[(df['Region'] == 'North') & (df['Sales'] > 150)]`
 
+## Data Cleaning and handling missing data
+The data can have missing values, duplicates or inconsistent formatting. Pandas has tools to fix these issues
+#### Identifying missing values
+Missing data in pandas is represented as `NaN` or `None`. We can find missing values using `df.isNull()` which returns True if data is null. We can chain this with `sum()` to count nulls in each column like `df.isnull().sum()`
+#### Dropping missing data
+If missing data is not too prevelant and we no need those rows we can drop them. `df.dropna()` removes any rows with at least one missing value
+
+- `df.dropna(how='all')` will drop only rows where all values are missing
+- `df.dropna(axis=1)` will drop entire columns that have any missing values
+- `df.dropna(subset=['Col1','Col2'])` will drop rows that have missing values in specified subset of columns only
+By default, `dropna()` returns a new DataFrame and leaves the original intact. If we have to modify in place, we can use `df.dropna(inplace=True)`
+
+#### Filling missing data
+In some cases, dropping data is not feasible and we might have to fill some data. we can use `df.fillna(value)` to replace NaNs with a specified `value`
+
+```python
+df['Age'].fillna(value=df['Age'].mean(), inplace=True)
+```
+- `df.fillna(method='ffill') - will forward propogate the last valid value downwards to fill NaNs
+- `df.fillna(method='bfill') - will back propogate the last valid value upwards to fill NaNs or gaps
+
+#### Removing Duplicates
+Duplicates can be removed using `df.drop_duplicates()` we can also specify subset of columns if we consider duplicates by certain fields only.
+
+#### Renaming columns
+We can use `df.rename()` to rename column labels or index labels
+```python
+df.rename(columns={'Profit':'NetProfit'}, inplace=True)
+```
+#### Type Conversions
+We might want to change the data types of the columns there are methods like `pd.to_datetime(df['Date'])` to convert text to datetime objects or `df['Amount'].astype(float)` to ensure a column is float type.
+
+## Merging an combining data sets
+We might have to combine multiple sources. Pandas support various ways to merge or concatenate DataFrames similar to SQL joins
+
+#### Concatenation
+We can concatenate 2 dataframes using `pd.concat([df1,df2])` It will append them one after the other by default but if there is conflict with indices, we might have to ignore the original index `pd.concat([df1,df2], ignore_index=True)`. We can also concatenate horizontally by specifying `axis=1` as long as indices align.
+
+#### Merging/ Joining
+Pandas has a function called `pd.merge()` to preform database-like joins between two DataFrames. 
+```python
+df = pd.merge(df_customers, df_orders, on='CustomerID', how='inner')
+```
+This will perform inner join on CustomerID key 
+
+#### Join Shorthand
+If the key for merging is the index of one or both DataFrames we might use df1.join(df2) which by default joins on indices.
+
+## Working with Dates and Times
+Time series data is very common and pandas extensively support handling these dates, times and time-indexed data.
+
+#### Parsing dates
+For parsing the date columns using 'parse_dates` in `read_csv` or `read_excel` or convert using `to_datetime()` function
+
+#### Date as index
+It is always useful to set the datetime as index mainly for time series analysis
+```
+df['Date'] = pd.to_datetime(df['Date'])
+df.set_index('Date', inplace=True)
+```
+We can also select the ranges with date strings 
+```
+df['2025-01']        # all data in January 2025
+df['2025-06-01':'2025-06-30']  # data for the month of June 2025
+```
+This is called date slicing
+
+#### Resampling
+If we have time series and want to change the frequency like daily data and monthly averages. we can use `df.resample()`
+```
+monthly_avg = df.resample('M').mean()
+```
+This groups the data by each calendar month ('M' frequency) and computes the mean of each month
+
+#### Date Range Generation
+Pandas can generate sequences of dates with `pd.date_range()`
+```
+dates = pd.date_range(start='2025-01-01', end='2025-01-10', freq='D')
+```
+ You could use this to reindex your DataFrame to include all days, then fill missing ones with `fillna`.
+
+Pandas also support time zones and period objects.
