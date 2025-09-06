@@ -80,3 +80,9 @@ Select multiple columns of data
 df[['Product','Sales']]
 ```
 This shows data in 2 dimensions
+To select the data from specific row, the pandas provides `.loc` indexer. So `df.loc[2]` indicates the index with label 2. To return rows from 1 thorugh 3 inclusive we can do `df.loc[1:3]`. and we can also specify rows and columns together `df.loc[1:3, ['Product','Profit']]`
+
+If we would like to use integer positions instead of labels we can use `.iloc` indexer. For example, `df.iloc[0:3]` gives rows at positions 0,1,2 exclusive of 3. And to fetch both row and column indices we can use `df.iloc[[0,2,3],[1,3]] ` would fetch a Dtaframe of specific row indices and column indices.
+
+We can also filter by boolean indexing where we can put a condition in the indexing brackets to filter rows. `df[df['Sales'] > 160]` or `df[(df['Region'] == 'North') & (df['Sales'] > 150)]`
+
