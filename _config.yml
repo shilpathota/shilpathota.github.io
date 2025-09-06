@@ -26,3 +26,4 @@ sidebar:
     children:
       - intro-kube
       - k8s-components
+      - k8s-deployment-strategies
