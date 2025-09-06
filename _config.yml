@@ -27,3 +27,6 @@ sidebar:
       - intro-kube
       - k8s-components
       - k8s-deployment-strategies
+  - label: Pandas
+    children:
+     - pandas-intro
