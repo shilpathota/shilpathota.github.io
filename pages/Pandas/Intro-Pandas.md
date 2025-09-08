@@ -21,7 +21,7 @@ To use the pandas, we first import the pandas library
 import pandas as pd
 ```
 
-## Creating the dataframe
+##  <span style="color: red;">Creating the dataframe</span>
 We can create the data frame from the dictionary of lists. For example,
 
 ```python
