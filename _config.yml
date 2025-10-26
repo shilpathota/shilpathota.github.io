@@ -30,3 +30,6 @@ sidebar:
   - label: Pandas
     children:
      - pandas-intro
+  - label: Pytorch
+    children:
+    - pytorch-intro
